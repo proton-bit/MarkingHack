@@ -11,5 +11,5 @@ output_data = pd.read_csv(
 )
 
 input_data.to_parquet(INPUT_CIRCULATION_PARQUET_FILENAME)
-transition_data.to_parquet(TRANSITION_CICULATION_PARQUET_FILENAME)
+transition_data.to_parquet(TRANSITION_CIRCULATION_PARQUET_FILENAME)
 output_data.to_parquet(OUTPUT_CIRCULATION_PARQUET_FILENAME)
