@@ -53,9 +53,7 @@ try:
         ),
         "Outbound Flow": pdk.Layer(
             "ArcLayer",
-            data=from_data_file(
-                
-            ),
+            data=from_data_file("bart_path_stats.json"),
             get_source_position=["lon", "lat"],
             get_target_position=["lon2", "lat2"],
             get_source_color=[200, 30, 0, 160],
