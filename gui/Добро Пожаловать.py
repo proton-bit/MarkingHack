@@ -6,7 +6,8 @@ import pandas as pd
 import numpy as np
 import json 
 
-config = json.load(open('interface.json'))
+with open('interface.json') as f:
+    config = json.load(f)
 
 st.set_page_config(
     page_title=f"{config['title']}" ,

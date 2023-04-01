@@ -7,7 +7,8 @@ import os
 from tqdm import tqdm
 from urllib.parse import urlencode
 
-config = json.load(open('interface.json'))
+with open('interface.json') as f:
+    config = json.load(f)
 
     
 def download_file_from_google_drive(id, destination):
@@ -35,7 +36,7 @@ def save_response_content(response, destination):
     CHUNK_SIZE = 32768
 
     # Get the total file size from the response headers
-    file_size = int(response.headers.get('Content-Length', 1000))
+    file_size = int(response.headers.get('Content-Length', 100))
 
     # Create a progress bar with the total file size
     progress_bar = st.progress(0)

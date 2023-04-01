@@ -9,7 +9,7 @@
 
     "download_folder": "../dataset",
     "welcome_page_text_prefix": "Введите ссылку на ",
-
+    "missing_data_message": "Пожалуйста загрузите соответствующие данные...",
     "warning":{
         "wrong_columns_warning_p1":"должны содержать",
         "wrong_columns_warning_p2":"а не"
