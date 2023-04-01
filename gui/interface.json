@@ -7,6 +7,8 @@
     "upload_5": "Справочник торговых точек",
     "upload_6": "Справочник участников оборота товаров",
 
+    "download_folder": "../dataset",
+    
     "warning":{
         "wrong_columns_warning_p1":"должны содержать",
         "wrong_columns_warning_p2":"а не"
