@@ -30,18 +30,3 @@ transition_circulation_data = upload_form(
     config["required_columns"][config["upload_3"]],
     file_format='.parquet'
     )
-product_handbook_data = upload_form(
-    config["upload_4"],
-    config["required_columns"][config["upload_4"]],
-    file_format='.csv'
-    )
-outlet_handbook_data = upload_form(
-    config["upload_5"],
-    config["required_columns"][config["upload_5"]],
-    file_format='.csv'
-    )
-participants_handbook_data = upload_form(
-    config["upload_6"],
-    config["required_columns"][config["upload_6"]],
-    file_format='.csv'
-    )

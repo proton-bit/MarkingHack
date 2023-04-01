@@ -8,7 +8,8 @@
     "upload_6": "Справочник участников оборота товаров",
 
     "download_folder": "../dataset",
-    
+    "welcome_page_text_prefix": "Введите ссылку на ",
+
     "warning":{
         "wrong_columns_warning_p1":"должны содержать",
         "wrong_columns_warning_p2":"а не"

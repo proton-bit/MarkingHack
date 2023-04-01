@@ -71,7 +71,7 @@ def load_to_df(path:str, file_format:str) -> pd.DataFrame:
 
 
 def upload_form(name:str, columns:List[str], file_format:str='.csv') -> pd.DataFrame:
-    user_query = st.text_input(label=f"Enter link to {name}", key=f"{name}_form")
+    user_query = st.text_input(label=f"{config['welcome_page_text_prefix']} {name.lower()}", key=f"{name}_form")
     if st.button('Search', key=f"{name}_button"):
         if user_query:
             link_type = url_or_file(user_query)
