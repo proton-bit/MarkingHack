@@ -2,90 +2,100 @@ import streamlit as st
 import pandas as pd
 import pydeck as pdk
 from urllib.error import URLError
-
-st.set_page_config(page_title="Карта цепочек поставок", page_icon="🌍")
-
-st.markdown("# Карта цепочек поставок")
-st.sidebar.header("Карта цепочек поставок")
-
-
-@st.cache_data
-def from_data_file(filename):
-    url = (
-        "http://raw.githubusercontent.com/streamlit/"
-        "example-data/master/hello/v1/%s" % filename
-    )
-    return pd.read_json(url)
+from supply_chain import create_supply_chains
+from utils import empty_page
+import os
+import json
 
 
-try:
-    ALL_LAYERS = {
-        "Bike Rentals": pdk.Layer(
-            "HexagonLayer",
-            data=from_data_file("bike_rental_stats.json"),
-            get_position=["lon", "lat"],
-            radius=200,
-            elevation_scale=4,
-            elevation_range=[0, 1000],
-            extruded=True,
-        ),
-        "Bart Stop Exits": pdk.Layer(
-            "ScatterplotLayer",
-            data=from_data_file("bart_stop_stats.json"),
-            get_position=["lon", "lat"],
-            get_color=[200, 30, 0, 160],
-            get_radius="[exits]",
-            radius_scale=0.05,
-        ),
-        "Bart Stop Names": pdk.Layer(
-            "TextLayer",
-            data=from_data_file("bart_stop_stats.json"),
-            get_position=["lon", "lat"],
-            get_text="name",
-            get_color=[0, 0, 0, 200],
-            get_size=15,
-            get_alignment_baseline="'bottom'",
-        ),
-        "Outbound Flow": pdk.Layer(
-            "ArcLayer",
-            data=from_data_file("bart_path_stats.json"),
-            get_source_position=["lon", "lat"],
-            get_target_position=["lon2", "lat2"],
-            get_source_color=[200, 30, 0, 160],
-            get_target_color=[200, 30, 0, 160],
-            auto_highlight=True,
-            width_scale=0.0001,
-            get_width="outbound",
-            width_min_pixels=3,
-            width_max_pixels=30,
-        ),
-    }
-    st.sidebar.markdown("### Map Layers")
-    selected_layers = [
-        layer
-        for layer_name, layer in ALL_LAYERS.items()
-        if st.sidebar.checkbox(layer_name, True)
-    ]
-    if selected_layers:
-        st.pydeck_chart(
-            pdk.Deck(
-                map_style="mapbox://styles/mapbox/light-v9",
-                initial_view_state={
-                    "latitude": 37.76,
-                    "longitude": -122.4,
-                    "zoom": 11,
-                    "pitch": 50,
-                },
-                layers=selected_layers,
-            )
+with open("interface.json") as f:
+    config = json.load(f)
+
+def page1_gui():
+    def update_map():
+        geodata = create_supply_chains(st.session_state.threshold_slider)
+        layers = [basic_layer(geodata)] 
+
+        pdk.Deck(
+            map_style="mapbox://styles/mapbox/light-v9",
+            initial_view_state={
+                "latitude": avg_latitude,
+                "longitude": avg_longtitude,
+                "zoom": 5,
+                "pitch": 50,
+            },
+            layers=layers,
         )
-    else:
-        st.error("Please choose at least one layer above.")
-except URLError as e:
-    st.error(
+
+    st.set_page_config(page_title=config["mappage_title"], page_icon="🌍")
+
+    st.title(config["mappage_title"])
+    st.sidebar.header(config["mappage_title"])
+
+    # geodata_path =  os.path.join(config["download_folder"], config["geochain_filename"])
+
+    threshold = st.sidebar.slider(
+        config["threshold_sidebar_text"], 
+        max_value=6, 
+        min_value=2,
+        value=5, 
+        key="threshold_slider",
+        on_change=update_map
+        )
+
+    geodata = create_supply_chains(threshold)
+
+    avg_latitude = ((geodata.lat + geodata.lat2)/2).sum() / len(geodata)
+    avg_longtitude = ((geodata.lon + geodata.lon2)/2).sum() / len(geodata)
+
+
+
+    def basic_layer(data):
+        return pdk.Layer(
+                "ArcLayer",
+                data=data,
+                get_source_position=["lon", "lat"],
+                get_target_position=["lon2", "lat2"],
+                get_source_color=[255, 0, 0, 100],
+                get_target_color=[0, 0, 255, 100],
+                auto_highlight=True,
+                width_scale=0.0001,
+                get_width="outbound",
+                width_min_pixels=3,
+                width_max_pixels=30,
+            )
+
+
+    try:
+        layers = [basic_layer(geodata)]
+
+        if layers:
+            st.pydeck_chart(
+                pdk.Deck(
+                    map_style="mapbox://styles/mapbox/light-v9",
+                    initial_view_state={
+                        "latitude": avg_latitude,
+                        "longitude": avg_longtitude,
+                        "zoom": 5,
+                        "pitch": 50,
+                    },
+                    layers=layers,
+                )
+            )
+        else:
+            st.error("Please choose at least one layer above.")
+        
+    except URLError as e:
+        st.error(
+            """
+            **This demo requires internet access.**
+            Connection error: %s
         """
-        **This demo requires internet access.**
-        Connection error: %s
-    """
-        % e.reason
-    )
+            % e.reason
+        )
+
+if os.path.exists(os.path.join(config["download_folder"], config["geochain_filename"])):
+    page1_gui()
+else:
+    empty_page()
+ 

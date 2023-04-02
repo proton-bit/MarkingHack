@@ -101,3 +101,7 @@ def upload_form(name:str, columns:List[str], file_format:str='.csv') -> pd.DataF
 def load_from_url(url:str, path:str) -> None:
     r = requests.get(url, allow_redirects=True)
     open(path, 'wb').write(r.content)
+
+
+def empty_page():
+    st.title(config["missing_data_message"])

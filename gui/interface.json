@@ -11,6 +11,11 @@
     "input_filename": "input.parquet",
     "transition_filename": "transition.parquet",
     "output_filename": "output.parquet",
+    "geochain_filename": "geochain.json",
+    "inn_2_coords_filename":"inn_2_coords.json",
+    "sender_receiver_filename": "sender_receiver.json",
+    "mappage_title": "Связь цепочек поставок",
+    "threshold_sidebar_text": "Максимальная длина маршрута",
 
     "plot_messages": {
         "piechart_title_prefix": "Круговая диаграма по колонке ",

@@ -7,13 +7,14 @@ import plotly.graph_objects as go
 from plots.pie_chart import generate_pie_chart
 from plots.box_plot import generate_box_plot
 from plots.countplot import generate_countplot
+from utils import empty_page
 
 with open('interface.json') as f:
     config = json.load(f)
 
 st.set_page_config(page_title=config["upload_3"], page_icon="📊")
 
-def page4_gui_positive():
+def page4_gui():
     st.title(config['upload_3'])
     
     df = pd.read_parquet(os.path.join(config["download_folder"], config["transition_filename"]))
@@ -29,11 +30,9 @@ def page4_gui_positive():
         )
     )
 
-def page4_gui_negative():
-    st.title(config["missing_data_message"])
 
 if os.path.exists(os.path.join(config["download_folder"], "output.parquet")):
-    page4_gui_positive()
+    page4_gui()
 else:
-    page4_gui_negative()
+    empty_page()
  

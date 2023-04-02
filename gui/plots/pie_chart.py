@@ -14,5 +14,5 @@ def generate_pie_chart(df:pd.DataFrame, column:str) -> go.Figure():
 
     fig = go.Figure()
     fig.add_trace(go.Pie(labels=counts.index, values=counts.values, hole=0.3))
-    fig.update_layout(title=f"{config['plot_messages']['piechart_title_prefix']} <<{column}>>")
+    fig.update_layout(title=f"{config['plot_messages']['piechart_title_prefix']} <<{column}>><br>")
     return fig
