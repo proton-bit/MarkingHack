@@ -3,6 +3,10 @@ import time
 import numpy as np
 import os
 import json 
+import pandas as pd
+
+from plots.pie_chart import generate_pie_chart
+from plots.box_plot import generate_box_plot
 
 with open('interface.json') as f:
     config = json.load(f)
@@ -10,28 +14,13 @@ with open('interface.json') as f:
 st.set_page_config(page_title=config["upload_1"], page_icon="📈")
 
 def page2_gui_positive():
-    st.markdown(f"# {config['upload_1']}")
-    st.sidebar.header(config["upload_1"])
-    st.write(
-        """This demo illustrates a combination of plotting and animation with
-    Streamlit. We're generating a bunch of random numbers in a loop for around
-    5 seconds. Enjoy!"""
-    )
-
-    progress_bar = st.sidebar.progress(0)
-    status_text = st.sidebar.empty()
-    last_rows = np.random.randn(1, 1)
-    chart = st.line_chart(last_rows)
-
-    for i in range(1, 101):
-        new_rows = last_rows[-1, :] + np.random.randn(5, 1).cumsum(axis=0)
-        status_text.text("%i%% Complete" % i)
-        chart.add_rows(new_rows)
-        progress_bar.progress(i)
-        last_rows = new_rows
-        time.sleep(0.05)
-
-    progress_bar.empty()
+    st.title(config['upload_1'])
+    
+    df = pd.read_parquet(os.path.join(config["download_folder"], config["input_filename"]))
+    
+    st.write(df.head(config["n_rows_table"]))
+    st.plotly_chart(generate_pie_chart(df, "operation_type"))
+    st.plotly_chart(generate_box_plot(df.sample(300), "cnt"))
 
 def page2_gui_negative():
     st.title(config["missing_data_message"])
