@@ -7,7 +7,7 @@
     "upload_5": "Справочник торговых точек",
     "upload_6": "Справочник участников оборота товаров",
 
-    "download_folder": "../dataset",
+    "download_folder": "dataset",
     "input_filename": "input.parquet",
     "transition_filename": "transition.parquet",
     "output_filename": "output.parquet",
