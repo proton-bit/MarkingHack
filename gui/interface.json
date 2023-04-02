@@ -25,6 +25,7 @@
     },
 
     "n_rows_table" : 20,
+    "max_data_points": 300,
 
     "emojies": {
         "done": "✅",

@@ -1,6 +1,4 @@
 import streamlit as st
-import time
-import numpy as np
 import os
 import json 
 import pandas as pd
@@ -19,8 +17,10 @@ def page2_gui_positive():
     df = pd.read_parquet(os.path.join(config["download_folder"], config["input_filename"]))
     
     st.write(df.head(config["n_rows_table"]))
+    st.write(df.describe())
+    
     st.plotly_chart(generate_pie_chart(df, "operation_type"))
-    st.plotly_chart(generate_box_plot(df.sample(300), "cnt"))
+    st.plotly_chart(generate_box_plot(df.sample(config["max_data_points"]), "cnt"))
 
 def page2_gui_negative():
     st.title(config["missing_data_message"])

@@ -1,43 +1,38 @@
 import streamlit as st
-import time
-import numpy as np
 import os
 import json 
+import pandas as pd
+from pandas.api.types import is_numeric_dtype
+import plotly.graph_objects as go
+from plots.pie_chart import generate_pie_chart
+from plots.box_plot import generate_box_plot
 
 with open('interface.json') as f:
     config = json.load(f)
 
 st.set_page_config(page_title=config["upload_2"], page_icon="📈")
 
-def page2_gui_positive():
-    st.markdown(f"# {config['upload_2']}")
-    st.sidebar.header(config["upload_2"])
-    st.write(
-        """This demo illustrates a combination of plotting and animation with
-    Streamlit. We're generating a bunch of random numbers in a loop for around
-    5 seconds. Enjoy!"""
+def page3_gui_positive():
+    st.title(config['upload_2'])
+    
+    df = pd.read_parquet(os.path.join(config["download_folder"], config["output_filename"]))
+    
+    st.write(df.head(config["n_rows_table"]))
+    st.write(df.describe())
+
+    st.plotly_chart(generate_pie_chart(df, "type_operation"))
+
+    option = st.selectbox(
+        'Pick column with numerical values',
+        [col for col in list(df.columns) if is_numeric_dtype(df[col])]
     )
+    st.plotly_chart(generate_box_plot(df.sample(config["max_data_points"]), option))
 
-    progress_bar = st.sidebar.progress(0)
-    status_text = st.sidebar.empty()
-    last_rows = np.random.randn(1, 1)
-    chart = st.line_chart(last_rows)
-
-    for i in range(1, 101):
-        new_rows = last_rows[-1, :] + np.random.randn(5, 1).cumsum(axis=0)
-        status_text.text("%i%% Complete" % i)
-        chart.add_rows(new_rows)
-        progress_bar.progress(i)
-        last_rows = new_rows
-        time.sleep(0.05)
-
-    progress_bar.empty()
-
-def page2_gui_negative():
+def page3_gui_negative():
     st.title(config["missing_data_message"])
 
-if os.path.exists(os.path.join(config["download_folder"], "input.parquet")):
-    page2_gui_positive()
+if os.path.exists(os.path.join(config["download_folder"], "output.parquet")):
+    page3_gui_positive()
 else:
-    page2_gui_negative()
+    page3_gui_negative()
  
