@@ -10,7 +10,7 @@ from plots.box_plot import generate_box_plot
 with open('interface.json') as f:
     config = json.load(f)
 
-st.set_page_config(page_title=config["upload_2"], page_icon="📈")
+st.set_page_config(page_title=config["upload_2"], page_icon="📊")
 
 def page3_gui_positive():
     st.title(config['upload_2'])
@@ -18,7 +18,7 @@ def page3_gui_positive():
     df = pd.read_parquet(os.path.join(config["download_folder"], config["output_filename"]))
     
     st.write(df.head(config["n_rows_table"]))
-    st.write(df.describe())
+    st.write(df.describe().transpose())
 
     st.plotly_chart(generate_pie_chart(df, "type_operation"))
 

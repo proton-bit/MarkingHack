@@ -5,7 +5,7 @@ import json
 with open('interface.json') as f:
     config = json.load(f)
 
-def generate_box_plot(df:pd.DataFrame, column:str):
+def generate_box_plot(df:pd.DataFrame, column:str) -> px.box:
     fig = px.box(
         df, 
         y=column, 
