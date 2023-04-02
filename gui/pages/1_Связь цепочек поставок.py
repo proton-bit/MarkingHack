@@ -3,10 +3,10 @@ import pandas as pd
 import pydeck as pdk
 from urllib.error import URLError
 
-st.set_page_config(page_title="Supply Chain Map", page_icon="🌍")
+st.set_page_config(page_title="Карта цепочек поставок", page_icon="🌍")
 
-st.markdown("# Supply Chain Map")
-st.sidebar.header("Supply Chain Map")
+st.markdown("# Карта цепочек поставок")
+st.sidebar.header("Карта цепочек поставок")
 
 
 @st.cache_data
