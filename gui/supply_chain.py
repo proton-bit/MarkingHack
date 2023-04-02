@@ -51,14 +51,21 @@ def seq_to_coords(sequence, hashmap, keys):
         ans.append(hashmap[inn])
 
 
-def create_supply_chains(threshold):
+def create_supply_chains(inn: str, lower_threshold: int = 2, upper_threshold: int = 20):
+    if inn:
+        hashmap = {k: v for k, v in sender_receiver.items() if k == inn}
+    else:
+        hashmap = {k: v for k, v in sender_receiver.items()}
     sequences = []
 
     for k in sender_receiver.keys():
-        tmp = find_sequence(k, sender_receiver, sender_receiver.keys(), threshold)
+        tmp = find_sequence(k, hashmap, hashmap.keys(), upper_threshold)
         tmp = seq_to_coords(tmp, final, final.keys())
         if bool(tmp):
-            sequences.extend(tmp)
+            sequences.append(tmp)
+    
+    sequences = list(filter(lambda x: len(x) >= lower_threshold, sequences))
+    sequences = [item for sublist in sequences for item in sublist]
 
     test = sequences
     if len(sequences) > 200:
@@ -79,6 +86,5 @@ def create_supply_chains(threshold):
         test_dict["lat2"].append(lat2)
         test_dict["lon"].append(lon)
         test_dict["lat"].append(lat)
-    
 
     return pd.DataFrame(test_dict)

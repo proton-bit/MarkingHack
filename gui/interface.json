@@ -15,7 +15,8 @@
     "inn_2_coords_filename":"inn_2_coords.json",
     "sender_receiver_filename": "sender_receiver.json",
     "mappage_title": "Связь цепочек поставок",
-    "threshold_sidebar_text": "Максимальная длина маршрута",
+    "max_threshold_sidebar_text": "Максимальная длина маршрута",
+    "min_threshold_sidebar_text": "Минимальная длина маршрута",
 
     "plot_messages": {
         "piechart_title_prefix": "Круговая диаграма по колонке ",
